@@ -8,7 +8,7 @@
 |---|---|---|
 | C-001 | 通知は LINE Messaging API のプッシュメッセージで送る。LINE Notify は 2025-03-31 に終了済みで使用できない | [LINE Notify 終了告知](https://developers.line.biz/en/news/2025/04/01/line-notify/) |
 | C-002 | 月間の送信メッセージ数を 200 通以内に収める。無料プランの上限で、超過分は追加購入できず、その月は送信不可になる | [Messaging API の料金](https://developers.line.biz/ja/docs/messaging-api/pricing/) |
-| C-003 | 通知用の LINE 公式アカウントを 1 つ開設し、Messaging API を有効化して使う。開設時にビジネスマネージャーとの接続が必要（ビジネスタイプは「個人事業主」）。ボット専用アカウントを公式アカウントと別に作る経路は存在しない | [Messaging API を始めよう](https://developers.line.biz/ja/docs/messaging-api/getting-started/) / [接続必須化の告知](https://www.lycbiz.com/jp/news/line-official-account/20250617/) |
+| C-003 | 通知用の LINE 公式アカウントを 1 つ開設し、Messaging API を有効化して使う。開設時にビジネスマネージャーとの接続が必要（ビジネスタイプは「個人事業主」。法人番号・サイト URL なしで作成できることを確認済み）。ボット専用アカウントを公式アカウントと別に作る経路は存在しない | [Messaging API を始めよう](https://developers.line.biz/ja/docs/messaging-api/getting-started/) / [接続必須化の告知](https://www.lycbiz.com/jp/news/line-official-account/20250617/) |
 | C-004 | 認証には長期チャネルアクセストークン（無期限）を使い、GitHub Actions Secrets に保存する | [チャネルアクセストークン](https://developers.line.biz/ja/docs/basics/channel-access-token/) |
 | C-005 | 番組表の取得には NHK 番組表 API Ver.3 を使う。API キーが必要（無料、1 アカウント 1 キー） | [NHK 番組表 API ポータル](https://api-portal.nhk.or.jp/) |
 | C-006 | 取得可能な期間は当日から 7 日先まで（当日を含む 8 日分）。8 日先を指定すると 400 が返る。過去日は取得できない | 実レスポンスで確認（[nhk-api.md](./nhk-api.md)）。[サービス案内](https://api-portal.nhk.or.jp/service-guide) は「8 日先まで」と読めるが実際は 7 日先まで |
