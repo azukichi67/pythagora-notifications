@@ -14,5 +14,5 @@ RUN echo "node ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/node \
     && chmod 0440 /etc/sudoers.d/node
 
 # named volume のマウント先。事前に作らないと root 所有になる
-RUN mkdir -p /home/node/.claude /home/node/.pnpm-store \
-    && chown -R node:node /home/node/.claude /home/node/.pnpm-store
+RUN mkdir -p /home/node/.claude /home/node/.pnpm-store /home/node/.config/gh \
+    && chown -R node:node /home/node/.claude /home/node/.pnpm-store /home/node/.config
