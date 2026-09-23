@@ -1,0 +1,4 @@
+allowBuilds:
+  # esbuild の postinstall はネイティブバイナリの検証と起動高速化のみで、
+  # 実行しなくても tsx / vitest は動く。依存のスクリプト実行を避けるため許可しない。
+  esbuild: false
