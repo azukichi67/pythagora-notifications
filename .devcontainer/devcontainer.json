@@ -1,0 +1,23 @@
+{
+  "name": "pythagora-notifications",
+  "build": { "dockerfile": "Dockerfile" },
+  "remoteUser": "node",
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+  },
+  "mounts": [
+    "source=pythagora-claude-config,target=/home/node/.claude,type=volume",
+    "source=pythagora-pnpm-store,target=/home/node/.pnpm-store,type=volume",
+    "source=pythagora-node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
+    "source=${localWorkspaceFolder}/../engineering-skills/.claude/skills,target=/home/node/.claude/skills,type=bind",
+    "source=${localEnv:USERPROFILE}/.claude/skills/grill-issue,target=/home/node/.claude/skills/grill-issue,type=bind"
+  ],
+  "postCreateCommand": "sudo chown node:node node_modules && pnpm config set store-dir /home/node/.pnpm-store && pnpm install",
+  "customizations": {
+    "vscode": { "extensions": ["biomejs.biome"] }
+  }
+}
