@@ -12,6 +12,7 @@
   "mounts": [
     "source=pythagora-claude-config,target=/home/node/.claude,type=volume",
     "source=pythagora-pnpm-store,target=/home/node/.pnpm-store,type=volume",
+    "source=pythagora-gh-config,target=/home/node/.config/gh,type=volume",
     "source=pythagora-node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
     "source=${localWorkspaceFolder}/../engineering-skills/.claude/skills,target=/home/node/.claude/skills,type=bind",
     "source=${localEnv:USERPROFILE}/.claude/skills/grill-issue,target=/home/node/.claude/skills/grill-issue,type=bind"
