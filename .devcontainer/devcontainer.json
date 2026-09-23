@@ -1,0 +1,18 @@
+{
+  "name": "pythagora-notifications",
+  "build": { "dockerfile": "Dockerfile" },
+  "remoteUser": "node",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+  },
+  "mounts": [
+    "source=pythagora-claude-config,target=/home/node/.claude,type=volume",
+    "source=pythagora-pnpm-store,target=/home/node/.pnpm-store,type=volume",
+    "source=pythagora-node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+  ],
+  "postCreateCommand": "sudo chown node:node node_modules && pnpm config set store-dir /home/node/.pnpm-store && pnpm install",
+  "customizations": {
+    "vscode": { "extensions": ["biomejs.biome"] }
+  }
+}
