@@ -39,14 +39,14 @@ GET https://program-api.nhk.jp/v3/papiPgDateTv
 | 終了日時 | `endDate` | `2026-09-30T04:05:00+09:00` |
 
 - `startDate` / `endDate` は ISO 8601 形式で JST オフセット付き。タイムゾーン変換は不要
-- `tvEpisodeName` は先頭に `▽` が付く。表示時に除去する
+- `tvEpisodeName` は先頭に `▽` が付く。除去せずそのまま使う
 - `publication[].name` は番組名とサブタイトルを `▽` で連結した文字列（`ピタゴラスイッチ　ミニ▽ねんどれ…`）。番組名側の末尾に全角スペースが入る揺れがあるが、`tvSeriesName` は半角スペースに正規化済み。`name` は使わない
 
 その他、`duration`（`PT10M` 形式）、`description`（番組内容）、`identifierGroup.genre` などが存在するが、本システムでは使わない。
 
 ### `tvSeriesName` が空になる放送
 
-ニュース・解説・単発番組では `tvSeriesName` が空になる（E テレ 2 件 / 総合 12 件、2026-09-29 実測）。
+ニュース・解説・単発番組では `identifierGroup` に `tvSeriesName` キー自体が存在しない（null でも空文字でもない。E テレ 2 件 / 総合 12 件、2026-09-29 実測）。`tvEpisodeName` も同様に、ない場合はキーごと欠ける。
 
 ピタゴラ系については、**8 日分 × 2 波で抽出した 16 件すべてが埋まっていた**。定時枠外の放送（`2026-09-22T09:41 こどもたちよ　あたまをつかえ！　スペシャル` など、[domain.md](./domain.md) でいう特別版）も含めて空はなかった。このため `tvSeriesName` への部分一致で抽出して差し支えない。
 
