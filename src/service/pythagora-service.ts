@@ -29,10 +29,7 @@ export function pickTargetBroadcasts(
 }
 
 export function buildSummary(broadcasts: readonly Broadcast[]): string {
-	const sortedBroadcasts = broadcasts.toSorted(
-		(a, b) => a.startsAt.getTime() - b.startsAt.getTime(),
-	);
-	const lines = groupByJstDate(sortedBroadcasts).flatMap((section, index) => [
+	const lines = buildDateSections(broadcasts).flatMap((section, index) => [
 		...(index === 0 ? [] : [""]),
 		`==== ${section.date} ====`,
 		...section.lines,
@@ -42,9 +39,11 @@ export function buildSummary(broadcasts: readonly Broadcast[]): string {
 
 type DateSection = { date: string; lines: string[] };
 
-// 並べ替え済みの放送を前提に、直前の放送と日付が変わったときだけ次の日付に切り替える
-function groupByJstDate(sortedBroadcasts: readonly Broadcast[]): DateSection[] {
+function buildDateSections(broadcasts: readonly Broadcast[]): DateSection[] {
 	const sections: DateSection[] = [];
+	const sortedBroadcasts = broadcasts.toSorted(
+		(a, b) => a.startsAt.getTime() - b.startsAt.getTime(),
+	);
 	for (const broadcast of sortedBroadcasts) {
 		const startsAt = formatStartsAt(broadcast.startsAt);
 		const lines = formatBroadcast(broadcast, startsAt.time);
