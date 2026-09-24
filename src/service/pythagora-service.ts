@@ -1,8 +1,9 @@
 import type { Broadcast } from "../domain/broadcast.ts";
 
 const HEADER = [
-	"どうも〜ピタゴラ通知のツーちんでーす",
-	"今週のピタゴラ予定を通知しまーす",
+	"どうも〜",
+	"ピタゴラ通知のツーちんでーす",
+	"今週のピタゴラ予定をお知らせしますよ～",
 ];
 // C-008: NHK 番組表 API 利用規約 第10条による表示義務
 const CREDIT = "情報提供:ＮＨＫ";

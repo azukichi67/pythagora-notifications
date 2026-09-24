@@ -17,7 +17,7 @@
 		"source=${localWorkspaceFolder}/../engineering-skills/.claude/skills,target=/home/node/.claude/skills,type=bind",
 		"source=${localEnv:USERPROFILE}/.claude/skills/grill-issue,target=/home/node/.claude/skills/grill-issue,type=bind"
 	],
-	"postCreateCommand": "sudo chown node:node node_modules && pnpm config set store-dir /home/node/.pnpm-store && pnpm install",
+	"postCreateCommand": "sudo chown node:node node_modules && gh auth setup-git && pnpm config set store-dir /home/node/.pnpm-store && pnpm install",
 	"customizations": {
 		"vscode": { "extensions": ["biomejs.biome"] }
 	}
