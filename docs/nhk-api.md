@@ -39,7 +39,7 @@ GET https://program-api.nhk.jp/v3/papiPgDateTv
 | 終了日時 | `endDate` | `2026-09-30T04:05:00+09:00` |
 
 - `startDate` / `endDate` は ISO 8601 形式で JST オフセット付き。タイムゾーン変換は不要
-- `tvEpisodeName` は先頭に `▽` が付く。表示時に除去する
+- `tvEpisodeName` は先頭に `▽` が付く。除去せずそのまま使う
 - `publication[].name` は番組名とサブタイトルを `▽` で連結した文字列（`ピタゴラスイッチ　ミニ▽ねんどれ…`）。番組名側の末尾に全角スペースが入る揺れがあるが、`tvSeriesName` は半角スペースに正規化済み。`name` は使わない
 
 その他、`duration`（`PT10M` 形式）、`description`（番組内容）、`identifierGroup.genre` などが存在するが、本システムでは使わない。
