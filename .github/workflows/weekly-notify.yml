@@ -21,9 +21,10 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      # typecheck / lint / test は main へのマージ時に ci.yml で済んでいるため実行しない
+      # typecheck / lint / test は ci.yml の役割とし、ここでは実行しない
       - run: pnpm start
         env:
           NHK_API_KEY: ${{ secrets.NHK_API_KEY }}
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
           LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+          TARGET_PROGRAM_NAME: ${{ vars.TARGET_PROGRAM_NAME }}
