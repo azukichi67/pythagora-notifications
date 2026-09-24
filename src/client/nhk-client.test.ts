@@ -4,43 +4,32 @@ import { fetchBroadcasts } from "./nhk-client.ts";
 // JST 2026-09-28 00:30。UTC ではまだ 09-27
 const NOW = new Date("2026-09-27T15:30:00Z");
 
-function publication(params: {
-	tvSeriesName: string | null;
-	tvEpisodeName: string | null;
-	startDate: string;
-	endDate: string;
-}) {
-	const { tvSeriesName, tvEpisodeName, startDate, endDate } = params;
-	return {
-		name: [tvSeriesName, tvEpisodeName].filter(Boolean).join(""),
-		startDate,
-		endDate,
-		identifierGroup: { tvSeriesName, tvEpisodeName },
-	};
-}
-
+// 実データでは番組名・サブタイトルがない枠は null ではなくキー自体が欠ける
 const E_PUBLICATIONS = [
-	publication({
-		tvSeriesName: "ピタゴラスイッチ",
-		tvEpisodeName: "▽紙コップコップ暗号▽うた",
+	{
+		name: "ピタゴラスイッチ▽紙コップコップ暗号▽うた",
 		startDate: "2026-09-28T06:45:00+09:00",
 		endDate: "2026-09-28T06:55:00+09:00",
-	}),
-	publication({
-		tvSeriesName: null,
-		tvEpisodeName: null,
+		identifierGroup: {
+			tvSeriesName: "ピタゴラスイッチ",
+			tvEpisodeName: "▽紙コップコップ暗号▽うた",
+		},
+	},
+	{
+		name: "放送休止",
 		startDate: "2026-09-28T05:30:00+09:00",
 		endDate: "2026-09-28T05:35:00+09:00",
-	}),
+		identifierGroup: {},
+	},
 ];
 
 const G_PUBLICATIONS = [
-	publication({
-		tvSeriesName: "ピタゴラスイッチ ミニ",
-		tvEpisodeName: null,
+	{
+		name: "ピタゴラスイッチ　ミニ",
 		startDate: "2026-09-28T05:10:00+09:00",
 		endDate: "2026-09-28T05:15:00+09:00",
-	}),
+		identifierGroup: { tvSeriesName: "ピタゴラスイッチ ミニ" },
+	},
 ];
 
 function jsonResponse(body: unknown, status = 200): Response {
@@ -100,7 +89,7 @@ describe("fetchBroadcasts", () => {
 		]);
 	});
 
-	it("tvSeriesName が null の枠を除外し、開始日時の昇順で「放送」に変換する", async () => {
+	it("tvSeriesName がない枠を除外し、開始日時の昇順で「放送」に変換する", async () => {
 		const broadcasts = await fetchBroadcasts({
 			apiKey: "nhk-key",
 			now: NOW,

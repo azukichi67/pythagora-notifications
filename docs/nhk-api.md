@@ -46,7 +46,7 @@ GET https://program-api.nhk.jp/v3/papiPgDateTv
 
 ### `tvSeriesName` が空になる放送
 
-ニュース・解説・単発番組では `tvSeriesName` が空になる（E テレ 2 件 / 総合 12 件、2026-09-29 実測）。
+ニュース・解説・単発番組では `identifierGroup` に `tvSeriesName` キー自体が存在しない（null でも空文字でもない。E テレ 2 件 / 総合 12 件、2026-09-29 実測）。`tvEpisodeName` も同様に、ない場合はキーごと欠ける。
 
 ピタゴラ系については、**8 日分 × 2 波で抽出した 16 件すべてが埋まっていた**。定時枠外の放送（`2026-09-22T09:41 こどもたちよ　あたまをつかえ！　スペシャル` など、[domain.md](./domain.md) でいう特別版）も含めて空はなかった。このため `tvSeriesName` への部分一致で抽出して差し支えない。
 

@@ -11,8 +11,8 @@ type Service = (typeof SERVICES)[number];
 
 type Publication = {
 	identifierGroup: {
-		tvSeriesName: string | null;
-		tvEpisodeName: string | null;
+		tvSeriesName?: string | null;
+		tvEpisodeName?: string | null;
 	};
 	startDate: string;
 	endDate: string;
@@ -79,13 +79,13 @@ async function fetchPublications(params: {
 
 function toBroadcast(publication: Publication): Broadcast[] {
 	const { tvSeriesName, tvEpisodeName } = publication.identifierGroup;
-	if (tvSeriesName === null) {
+	if (!tvSeriesName) {
 		return [];
 	}
 	return [
 		{
 			seriesName: tvSeriesName,
-			subtitle: tvEpisodeName,
+			subtitle: tvEpisodeName ?? null,
 			startsAt: new Date(publication.startDate),
 			endsAt: new Date(publication.endDate),
 		},
