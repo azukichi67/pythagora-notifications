@@ -18,6 +18,15 @@ const JST_DATE_TIME = new Intl.DateTimeFormat("ja-JP", {
 	hourCycle: "h23",
 });
 
+export function pickTargetBroadcasts(
+	broadcasts: readonly Broadcast[],
+	targetProgramName: string,
+): Broadcast[] {
+	return broadcasts.filter((broadcast) =>
+		broadcast.seriesName.includes(targetProgramName),
+	);
+}
+
 export function buildSummary(broadcasts: readonly Broadcast[]): string {
 	const lines = broadcasts
 		.toSorted((a, b) => a.startsAt.getTime() - b.startsAt.getTime())

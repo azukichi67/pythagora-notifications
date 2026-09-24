@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Broadcast } from "../domain/broadcast.ts";
-import { buildSummary } from "./pythagora-service.ts";
+import { buildSummary, pickTargetBroadcasts } from "./pythagora-service.ts";
 
 function broadcast(
 	startsAt: string,
@@ -110,5 +110,75 @@ describe("buildSummary", () => {
 				"情報提供:ＮＨＫ",
 			].join("\n"),
 		);
+	});
+});
+
+describe("pickTargetBroadcasts", () => {
+	it("番組名に対象番組名を含むピタゴラ系 3 シリーズを残す", () => {
+		const broadcasts = [
+			broadcast("2026-09-28T07:00:00+09:00", "ピタゴラスイッチ", null),
+			broadcast("2026-09-28T08:00:00+09:00", "ピタゴラスイッチ ミニ", null),
+			broadcast("2026-09-28T09:00:00+09:00", "大人のピタゴラスイッチ", null),
+		];
+
+		expect(pickTargetBroadcasts(broadcasts, "ピタゴラ")).toEqual(broadcasts);
+	});
+
+	it("番組名に対象番組名を含まない放送を除く", () => {
+		const target = broadcast(
+			"2026-09-28T07:00:00+09:00",
+			"ピタゴラスイッチ",
+			null,
+		);
+		const unrelated = broadcast("2026-09-28T07:10:00+09:00", "0655", null);
+
+		expect(pickTargetBroadcasts([target, unrelated], "ピタゴラ")).toEqual([
+			target,
+		]);
+	});
+
+	it("サブタイトルにだけ対象番組名を含む放送を除く", () => {
+		const broadcasts = [
+			broadcast("2026-09-28T07:00:00+09:00", "0655", "▽ピタゴラ装置のうた"),
+		];
+
+		expect(pickTargetBroadcasts(broadcasts, "ピタゴラ")).toEqual([]);
+	});
+
+	it("該当する放送が 0 件なら空の一覧を返す", () => {
+		const broadcasts = [broadcast("2026-09-28T07:00:00+09:00", "0655", null)];
+
+		expect(pickTargetBroadcasts(broadcasts, "ピタゴラ")).toEqual([]);
+	});
+
+	it("対象番組名を変えるとその値で抽出する", () => {
+		const target = broadcast("2026-09-28T07:00:00+09:00", "0655", null);
+		const broadcasts = [
+			broadcast("2026-09-28T06:55:00+09:00", "ピタゴラスイッチ", null),
+			target,
+		];
+
+		expect(pickTargetBroadcasts(broadcasts, "0655")).toEqual([target]);
+	});
+
+	it("入力の順序を保ち、引数の配列を変更しない", () => {
+		const later = broadcast(
+			"2026-09-29T07:00:00+09:00",
+			"ピタゴラスイッチ",
+			null,
+		);
+		const unrelated = broadcast("2026-09-28T08:00:00+09:00", "0655", null);
+		const earlier = broadcast(
+			"2026-09-28T07:00:00+09:00",
+			"ピタゴラスイッチ ミニ",
+			null,
+		);
+		const broadcasts = [later, unrelated, earlier];
+
+		expect(pickTargetBroadcasts(broadcasts, "ピタゴラ")).toEqual([
+			later,
+			earlier,
+		]);
+		expect(broadcasts).toEqual([later, unrelated, earlier]);
 	});
 });
