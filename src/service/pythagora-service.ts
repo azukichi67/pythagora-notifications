@@ -29,22 +29,48 @@ export function pickTargetBroadcasts(
 }
 
 export function buildSummary(broadcasts: readonly Broadcast[]): string {
-	const lines = broadcasts
-		.toSorted((a, b) => a.startsAt.getTime() - b.startsAt.getTime())
-		.flatMap(formatBroadcast);
+	const sortedBroadcasts = broadcasts.toSorted(
+		(a, b) => a.startsAt.getTime() - b.startsAt.getTime(),
+	);
+	const lines = groupByJstDate(sortedBroadcasts).flatMap((section, index) => [
+		...(index === 0 ? [] : [""]),
+		`==== ${section.date} ====`,
+		...section.lines,
+	]);
 	return [...HEADER, "", ...lines, "", CREDIT].join("\n");
 }
 
-function formatBroadcast(broadcast: Broadcast): string[] {
-	const heading = `${formatStartsAt(broadcast.startsAt)} ${broadcast.seriesName}`;
+type DateSection = { date: string; lines: string[] };
+
+// 並べ替え済みの放送を前提に、直前の放送と日付が変わったときだけ次の日付に切り替える
+function groupByJstDate(sortedBroadcasts: readonly Broadcast[]): DateSection[] {
+	const sections: DateSection[] = [];
+	for (const broadcast of sortedBroadcasts) {
+		const startsAt = formatStartsAt(broadcast.startsAt);
+		const lines = formatBroadcast(broadcast, startsAt.time);
+		const lastSection = sections.at(-1);
+		if (lastSection?.date === startsAt.date) {
+			lastSection.lines.push(...lines);
+		} else {
+			sections.push({ date: startsAt.date, lines });
+		}
+	}
+	return sections;
+}
+
+function formatBroadcast(broadcast: Broadcast, time: string): string[] {
+	const heading = `■ ${time} ${broadcast.seriesName}`;
 	return broadcast.subtitle === null
 		? [heading]
 		: [heading, broadcast.subtitle];
 }
 
-function formatStartsAt(date: Date): string {
+function formatStartsAt(date: Date): { date: string; time: string } {
 	const parts = Object.fromEntries(
 		JST_DATE_TIME.formatToParts(date).map(({ type, value }) => [type, value]),
 	);
-	return `${parts.month}/${parts.day}(${parts.weekday}) ${parts.hour}:${parts.minute}`;
+	return {
+		date: `${parts.month}/${parts.day}(${parts.weekday})`,
+		time: `${parts.hour}:${parts.minute}`,
+	};
 }
