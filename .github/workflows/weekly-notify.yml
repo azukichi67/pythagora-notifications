@@ -1,6 +1,7 @@
 name: Weekly Notify
 
 on:
+  # cron-job.org から GitHub REST API 経由で起動する（docs/requirements.md C-012）
   workflow_dispatch:
 
 permissions:
